@@ -24,7 +24,6 @@ matrix:
             - docker
           env:
             - OPENRCT2_CMAKE_OPTS="-G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=OpenRCT2 -DPORTABLE=ON -DDISABLE_RCT2_TESTS=on" TARGET=ubuntu_amd64
-            - secure: "S3u2VCE2Vy8KNXoeh+DhnzjCmgTX0r95uEZrXDU+IKANOOCKn7Dg4OFDZE3LY/i1y2/EUDpnR5yLC38Ks795EUP/sv/OoMl4tjQ20yERjqWh+gcIRrgx7SdVabuAh3t4aBdaLD4Pfnj5avxeCt6rL7yGnj0wdbrbJSBZPsgSnuQ="
           after_success:
             # Android jobs are triggered from cron and overwrite `after_sucess` part
             - if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]] ; then exit 0 ; fi
@@ -38,17 +37,13 @@ matrix:
               export PUSH_BRANCH=master ;
               else export PUSH_BRANCH=$TRAVIS_BRANCH ; export FILENAME_PART=-${TRAVIS_BRANCH}-$(git rev-parse --short HEAD) ;
               fi
-            - if [[ "z$OPENRCT2_ORG_TOKEN" != "z" && "$TRAVIS_PULL_REQUEST" == "false" && ("${TRAVIS_BRANCH}" =~ ^(develop|push/) || "z${TRAVIS_TAG}" != "z") ]] ; then
-              curl -o - -v --form "key=$OPENRCT2_ORG_TOKEN" --form "fileName=OpenRCT2-${OPENRCT2_VERSION}${FILENAME_PART}-linux-x86_64.tar.gz" --form "version=${OPENRCT2_VERSION}" --form "gitHash=$TRAVIS_COMMIT" --form "gitBranch=$PUSH_BRANCH" --form "flavourId=9" --form "file=@openrct2-linux.tar.gz" "https://openrct2.org/altapi/?command=push-build";
-              else curl --progress-bar --upload-file openrct2-linux.tar.gz https://transfer.sh/openrct2-linux-x86_64.tar.gz -o link && cat link;
-              fi
+            - curl --progress-bar --upload-file openrct2-linux.tar.gz https://transfer.sh/openrct2-linux-x86_64.tar.gz -o link && cat link;
         - os: linux
           if: type != cron
           services:
             - docker
           env:
             - OPENRCT2_CMAKE_OPTS="-G Ninja -DFORCE32=ON -DBUILD_SHARED_LIBS=off -DCMAKE_INSTALL_PREFIX=OpenRCT2 -DDISABLE_RCT2_TESTS=on" TARGET=ubuntu_i686
-            - secure: "S3u2VCE2Vy8KNXoeh+DhnzjCmgTX0r95uEZrXDU+IKANOOCKn7Dg4OFDZE3LY/i1y2/EUDpnR5yLC38Ks795EUP/sv/OoMl4tjQ20yERjqWh+gcIRrgx7SdVabuAh3t4aBdaLD4Pfnj5avxeCt6rL7yGnj0wdbrbJSBZPsgSnuQ="
           after_success:
             # Android jobs are triggered from cron and overwrite `after_sucess` part
             - if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]] ; then exit 0 ; fi
@@ -62,10 +57,7 @@ matrix:
               export PUSH_BRANCH=master ;
               else export PUSH_BRANCH=$TRAVIS_BRANCH ; export FILENAME_PART=-${TRAVIS_BRANCH}-$(git rev-parse --short HEAD) ;
               fi
-            - if [[ "z$OPENRCT2_ORG_TOKEN" != "z" && "$TRAVIS_PULL_REQUEST" == "false" && ("${TRAVIS_BRANCH}" =~ ^(develop|push/) || "z${TRAVIS_TAG}" != "z") ]] ; then
-              curl -o - -v --form "key=$OPENRCT2_ORG_TOKEN" --form "fileName=OpenRCT2-${OPENRCT2_VERSION}${FILENAME_PART}-linux-i686.tar.gz" --form "version=${OPENRCT2_VERSION}" --form "gitHash=$TRAVIS_COMMIT" --form "gitBranch=$PUSH_BRANCH" --form "flavourId=4" --form "file=@openrct2-linux.tar.gz" "https://openrct2.org/altapi/?command=push-build";
-              else curl --progress-bar --upload-file openrct2-linux.tar.gz https://transfer.sh/openrct2-linux-i686.tar.gz -o link && cat link;
-              fi
+            - curl --progress-bar --upload-file openrct2-linux.tar.gz https://transfer.sh/openrct2-linux-i686.tar.gz -o link && cat link;
         - os: linux
           if: type != cron
           env: OPENRCT2_CMAKE_OPTS="-G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_SHARED_LIBS=ON -DDISABLE_RCT2_TESTS=on" TARGET=ubuntu_amd64
@@ -90,8 +82,6 @@ matrix:
         - os: osx
           if: type != cron
           osx_image: xcode8.3
-          env:
-            - secure: "OXn/i72FxW/oh6RGlaN+gHSbkt1ToFe36etaiDOsJQznt6fe9CpFdnE8U1XBHlGokcEjbGNErRU7CFDKYHQuGrPZyHXwgqG2/0emIqFaFt5ti5ypyYKf5qH9x1LLLfdZxDyHkxXdlJ7Etxbp3G7qrV8CGRQiYRNHm1f98AmuufE="
           after_success:
             # Android jobs are triggered from cron and overwrite `after_sucess` part
             - if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]] ; then exit 0 ; fi
@@ -101,17 +91,12 @@ matrix:
               export PUSH_BRANCH=master ;
               else export PUSH_BRANCH=$TRAVIS_BRANCH ; export FILENAME_PART=-${TRAVIS_BRANCH}-$(git rev-parse --short HEAD) ;
               fi
-            - if [[ "z$OPENRCT2_ORG_TOKEN" != "z" && "$TRAVIS_PULL_REQUEST" == "false" && ("${TRAVIS_BRANCH}" =~ ^(develop|push/) || "z${TRAVIS_TAG}" != "z") ]] ; then
-              curl -o - -v --form "key=$OPENRCT2_ORG_TOKEN" --form "fileName=OpenRCT2-${OPENRCT2_VERSION}${FILENAME_PART}-macos.zip" --form "version=${OPENRCT2_VERSION}" --form "gitHash=$TRAVIS_COMMIT" --form "gitBranch=$PUSH_BRANCH" --form "flavourId=3" --form "file=@openrct2-macos.zip" "https://openrct2.org/altapi/?command=push-build"; else
-              curl --progress-bar --upload-file openrct2-macos.zip https://transfer.sh/openrct2-macos.zip -o link && cat link;
-              fi
+            - curl --progress-bar --upload-file openrct2-macos.zip https://transfer.sh/openrct2-macos.zip -o link && cat link;
         - os: linux
           if: type = cron
           language: android
           dist: precise
           before_install: []
-          env:
-            - secure: "S3u2VCE2Vy8KNXoeh+DhnzjCmgTX0r95uEZrXDU+IKANOOCKn7Dg4OFDZE3LY/i1y2/EUDpnR5yLC38Ks795EUP/sv/OoMl4tjQ20yERjqWh+gcIRrgx7SdVabuAh3t4aBdaLD4Pfnj5avxeCt6rL7yGnj0wdbrbJSBZPsgSnuQ="
           addons:
             apt:
               sources:
@@ -154,28 +139,6 @@ matrix:
               export PUSH_BRANCH=master ;
               else export PUSH_BRANCH=$TRAVIS_BRANCH ; export FILENAME_PART=-${TRAVIS_BRANCH}-$(git rev-parse --short HEAD) ;
               fi
-            - if [[ "z$OPENRCT2_ORG_TOKEN" != "z" && "$TRAVIS_PULL_REQUEST" == "false" && ("${TRAVIS_BRANCH}" =~ ^(develop|push/) || "z${TRAVIS_TAG}" != "z") ]] ; then
-              curl -o - -v --form "key=$OPENRCT2_ORG_TOKEN" --form "fileName=OpenRCT2-${OPENRCT2_VERSION}${FILENAME_PART}-android-arm.apk" --form "version=${OPENRCT2_VERSION}" --form "gitHash=$TRAVIS_COMMIT" --form "gitBranch=$PUSH_BRANCH" --form "flavourId=11" --form "file=@app/build/outputs/apk/app-arm-pr.apk" "https://openrct2.org/altapi/?command=push-build";
-              fi
-            - if [[ "z$OPENRCT2_ORG_TOKEN" != "z" && "$TRAVIS_PULL_REQUEST" == "false" && ("${TRAVIS_BRANCH}" =~ ^(develop|push/) || "z${TRAVIS_TAG}" != "z") ]] ; then
-              curl -o - -v --form "key=$OPENRCT2_ORG_TOKEN" --form "fileName=OpenRCT2-${OPENRCT2_VERSION}${FILENAME_PART}-android-x86.apk" --form "version=${OPENRCT2_VERSION}" --form "gitHash=$TRAVIS_COMMIT" --form "gitBranch=$PUSH_BRANCH" --form "flavourId=12" --form "file=@app/build/outputs/apk/app-x86-pr.apk" "https://openrct2.org/altapi/?command=push-build";
-              fi
-        # Following entries used to be included in testing, but they only proved useful while changing things in CMake setup.
-        # They are meant to be used when there are changes to CMakeLists.txt
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=ON -DDISABLE_HTTP_TWITCH=ON -DCMAKE_C_COMPILER=gcc-4.8 -DCMAKE_CXX_COMPILER=g++-4.8"
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=ON -DDISABLE_HTTP_TWITCH=ON -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=OFF -DDISABLE_HTTP_TWITCH=ON -DCMAKE_C_COMPILER=gcc-4.8 -DCMAKE_CXX_COMPILER=g++-4.8"
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=OFF -DDISABLE_HTTP_TWITCH=OFF -DCMAKE_C_COMPILER=gcc-4.8 -DCMAKE_CXX_COMPILER=g++-4.8"
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=ON -DCMAKE_TOOLCHAIN_FILE=../CMakeLists_mingw.txt" TARGET=windows
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_NETWORK=ON -DDISABLE_HTTP_TWITCH=ON -DCMAKE_TOOLCHAIN_FILE=../CMakeLists_mingw.txt" TARGET=windows
-        # - os: linux
-        #   env: OPENRCT2_CMAKE_OPTS="-DDISABLE_HTTP_TWITCH=ON -DCMAKE_TOOLCHAIN_FILE=../CMakeLists_mingw.txt" TARGET=windows
 
 script:
     # Android jobs are triggered from cron and overwrite `script` part
